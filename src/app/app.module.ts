@@ -6,6 +6,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { TablicaComponent } from './tablica/tablica.component';
 import { TableModule } from 'primeng/table';
+import { DataService } from './data.service';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -17,9 +19,10 @@ import { TableModule } from 'primeng/table';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    TableModule
+    TableModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [DataService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

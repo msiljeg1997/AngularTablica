@@ -1,0 +1,21 @@
+.table-container{
+    width: 50%;
+    margin: auto;
+    border: 1px solid black;
+}
+
+a {
+    text-decoration: underline;
+    color: blue;
+    cursor: pointer;
+  }
+  
+  a:active {
+    position: relative;
+    top: 1px;
+  }
+
+.gumb{
+    display: flex;
+    align-items: center;
+}

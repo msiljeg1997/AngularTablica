@@ -1,21 +1,44 @@
-
-<p-table  [tableStyle]="{'min-width': '60rem'}">
+<div class="table table-container">
+  <p-table [value]="displayedSalesHeader">
     <ng-template pTemplate="header">
-        <tr>
-            <th pSortableColumn="code" style="width:20%">Code <p-sortIcon field="code"></p-sortIcon></th>
-            <th pSortableColumn="name" style="width:20%">Name <p-sortIcon field="name"></p-sortIcon></th>
-            <th pSortableColumn="category" style="width:20%">Category <p-sortIcon field="category"></p-sortIcon></th>
-            <th pSortableColumn="quantity" style="width:20%">Quantity <p-sortIcon field="quantity"></p-sortIcon></th>
-            <th pSortableColumn="price" style="width:20%">Price <p-sortIcon field="price"></p-sortIcon></th>
-        </tr>
+      <tr>
+        <th pSortableColumn="No">No <p-sortIcon field="No"></p-sortIcon></th>
+        <th pSortableColumn="BillToName">BillToName <p-sortIcon field="BillToName"></p-sortIcon></th>
+        <th pSortableColumn="BillToAddress">BillToAddress <p-sortIcon field="BillToAddress"></p-sortIcon></th>
+        <th pSortableColumn="ShipToName">ShipToName <p-sortIcon field="ShipToName"></p-sortIcon></th>
+        <th pSortableColumn="ShipToAddress">ShipToAddress <p-sortIcon field="ShipToAddress"></p-sortIcon></th>
+        <th pSortableColumn="DocumentType">DocumentType <p-sortIcon field="DocumentType"></p-sortIcon></th>
+      </tr>
     </ng-template>
-    <ng-template pTemplate="body" let-product>
-        <tr>
-            <td>AAA</td>
-            <td>AAA</td>
-            <td>AAA</td>
-            <td>AAA</td>
-            
-        </tr>
+    <ng-template pTemplate="body" let-salesHeader>
+      <tr>
+        <td><a (click)="selectNo(salesHeader.No)">{{salesHeader.No}}</a></td>
+        <td>{{salesHeader.BillToName}}</td>
+        <td>{{salesHeader.BillToAddress}}</td>
+        <td>{{salesHeader.ShipToName}}</td>
+        <td>{{salesHeader.ShipToAddress}}</td>
+        <td>{{salesHeader.DocumentType}}</td>
+      </tr>
     </ng-template>
-</p-table>
+  </p-table>
+<div class="gumb">
+  <button class="gumbPravi" (click)="toggleShowAll()">{{showAllRows ? 'Show Less' : 'Show All'}}</button>
+</div>
+ 
+  <p-table *ngIf="selectedNo" [value]="filteredSalesLines">
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="DocumentType">DocumentType <p-sortIcon field="DocumentType"></p-sortIcon></th>
+        <th pSortableColumn="QuantityInvoiced">QuantityInvoiced <p-sortIcon field="QuantityInvoiced"></p-sortIcon></th>
+        <th pSortableColumn="ProfitPercent">ProfitPercent<p-sortIcon field="ProfitPercent"></p-sortIcon></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-salesLines>
+      <tr>
+        <td>{{salesLines.DocumentNo}}</td>
+        <td>{{salesLines.QuantityInvoiced}}</td>
+        <td>{{salesLines.ProfitPercent}} %</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
