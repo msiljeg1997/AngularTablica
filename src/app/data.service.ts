@@ -9,6 +9,9 @@ import { Observable, from } from 'rxjs';
 export class DataService {
   private salesHeaderUrl = 'http://localhost:5161/api/BCCommunication/api/dohvatiSalesHeadere';
   private salesLineUrl = 'http://localhost:5161/api/BCCommunication/api/dohvatiSalesLines';
+  private salesHeaderUrlEDIT = 'http://localhost:5161/api/BCCommunication/api/UpdateSalesHeader';
+  private salesHeaderUrlDELETE = 'http://localhost:5161/api/BCCommunication';
+
 
   constructor(private http: HttpClient) { }
 
@@ -23,6 +26,14 @@ export class DataService {
   getSalesLine(): Observable<any> {
     var response = this.http.get<JSON>(this.salesLineUrl);
     return response;
+  }
+
+  updateSalesHeader(No: number, salesHeaderWithoutNo: any): Observable<any> {
+    return this.http.put(`${this.salesHeaderUrlEDIT}/${No}`, salesHeaderWithoutNo);
+  }
+
+  deleteSalesHeader(No: number): Observable<any> {
+    return this.http.delete(`${this.salesHeaderUrlDELETE}?No=${No}`);
   }
   
   }

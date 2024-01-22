@@ -24,7 +24,7 @@ constructor(private dataService: DataService) {
 ngOnInit() {
   this.dataService.getSalesHeader().subscribe({
     next: data => {
-      this.salesHeader = data;
+      this.salesHeader = data.map((item: any) => ({ ...item, editMode: false }));
       this.updateDisplayedSalesHeader();
     },
     error: error => {
@@ -60,7 +60,38 @@ selectNo(no: string) {
  
 }
 
+editRow(salesHeader: any) {
+  if (salesHeader.editMode) {
+    const { No, ...salesHeaderWithoutNo } = salesHeader;
+    const noAsInt = parseInt(No, 10);
+    this.dataService.updateSalesHeader(noAsInt, salesHeaderWithoutNo).subscribe({
+      next: () => {
+        console.log('Updejtano');
+        salesHeader.editMode = false; 
+      },
+      error: (error: any) => {
+        console.error('Error neki jbg:', error);
+      }
+    });
+  } else {
+    salesHeader.editMode = true; 
+  }
+}
 
+deleteRow(no: string) {
+  const noAsInt = parseInt(no, 10);
+  this.dataService.deleteSalesHeader(noAsInt).subscribe({
+    next: () => {
+      console.log('Sales header deleted successfully');
+      // Remove the deleted sales header from the local data
+      this.salesHeader = this.salesHeader.filter(sh => sh.No !== no);
+      this.updateDisplayedSalesHeader();
+    },
+    error: (error: any) => {
+      console.error('Error occurred:', error);
+    }
+  });
+}
 
 }
 
