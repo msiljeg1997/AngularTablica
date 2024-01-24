@@ -14,6 +14,7 @@ export class TablicaComponent {
   filteredSalesLines!: any[];
   displayedSalesHeader: any[];
   showAllRows: boolean = false;
+  originalSalesHeader: any;
 
 constructor(private dataService: DataService) {
   this.filteredSalesLines = [];
@@ -64,7 +65,7 @@ editRow(salesHeader: any) {
   if (salesHeader.editMode) {
     const { No, ...salesHeaderWithoutNo } = salesHeader;
     const noAsInt = parseInt(No, 10);
-    this.dataService.updateSalesHeader(noAsInt, salesHeaderWithoutNo).subscribe({
+    this.dataService.updateSalesHeader(noAsInt, { ...salesHeaderWithoutNo, DocumentType: this.originalSalesHeader.DocumentType }).subscribe({
       next: () => {
         console.log('Updejtano');
         salesHeader.editMode = false; 
@@ -74,13 +75,14 @@ editRow(salesHeader: any) {
       }
     });
   } else {
+    this.originalSalesHeader = { ...salesHeader };
     salesHeader.editMode = true; 
   }
 }
 
-deleteRow(no: string) {
+deleteRow(no: string, DocumentType: string) {
   const noAsInt = parseInt(no, 10);
-  this.dataService.deleteSalesHeader(noAsInt).subscribe({
+  this.dataService.deleteSalesHeader(noAsInt, DocumentType).subscribe({
     next: () => {
       console.log('Sales header deleted successfully');
       // Remove the deleted sales header from the local data

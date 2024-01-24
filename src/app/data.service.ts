@@ -32,8 +32,8 @@ export class DataService {
     return this.http.put(`${this.salesHeaderUrlEDIT}/${No}`, salesHeaderWithoutNo);
   }
 
-  deleteSalesHeader(No: number): Observable<any> {
-    return this.http.delete(`${this.salesHeaderUrlDELETE}?No=${No}`);
+  deleteSalesHeader(No: number, DocumentType: string): Observable<any> {
+    return this.http.delete(`${this.salesHeaderUrlDELETE}/${No}/${DocumentType}`);
   }
   
   }

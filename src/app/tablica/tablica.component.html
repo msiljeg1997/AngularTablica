@@ -27,7 +27,7 @@
         <td>
           <button (click)="editRow(salesHeader)">{{salesHeader.editMode ? 'Save' : 'Edit'}}</button>
           <button *ngIf="salesHeader.editMode" (click)="salesHeader.editMode = false">Cancel</button>
-          <button (click)="deleteRow(salesHeader.No)">Delete</button>
+          <button (click)="deleteRow(salesHeader.No, salesHeader.DocumentType)">Delete</button>
         </td>
       </tr>
     </ng-template>
