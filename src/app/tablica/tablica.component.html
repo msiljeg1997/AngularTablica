@@ -1,4 +1,5 @@
 <div class="table table-container">
+
   <p-table [value]="displayedSalesHeader">
     <ng-template pTemplate="header">
       <tr>
@@ -9,9 +10,26 @@
         <th pSortableColumn="ShipToAddress">ShipToAddress <p-sortIcon field="ShipToAddress"></p-sortIcon></th>
         <th pSortableColumn="DocumentType">DocumentType <p-sortIcon field="DocumentType"></p-sortIcon></th>
       </tr>
+      <td>
+    <button (click)="showInsertForm = !showInsertForm">Insert</button>
+      </td>
+  
+
+      <div *ngIf="showInsertForm">
+        <form [formGroup]="insertForm" (ngSubmit)="onSubmit()">
+          <input formControlName="No" placeholder="No">
+          <input formControlName="BillToName" placeholder="BillToName">
+          <input formControlName="BillToAddress" placeholder="BillToAddress">
+          <input formControlName="ShipToName" placeholder="ShipToName">
+          <input formControlName="ShipToAddress" placeholder="ShipToAddress">
+          <input formControlName="DocumentType" placeholder="DocumentType">
+          <button type="submit">Submit</button>
+        </form>
+      </div>
     </ng-template>
     <ng-template pTemplate="body" let-salesHeader>
       <tr>
+        
         <td *ngIf="!salesHeader.editMode; else editNo"><a (click)="selectNo(salesHeader.No)">{{salesHeader.No}}</a></td>
         <ng-template #editNo><input [(ngModel)]="salesHeader.No"></ng-template>
         <td *ngIf="!salesHeader.editMode; else editBillToName">{{salesHeader.BillToName}}</td>
@@ -29,6 +47,7 @@
           <button *ngIf="salesHeader.editMode" (click)="salesHeader.editMode = false">Cancel</button>
           <button (click)="deleteRow(salesHeader.No, salesHeader.DocumentType)">Delete</button>
         </td>
+        
       </tr>
     </ng-template>
   </p-table>

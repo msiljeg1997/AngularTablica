@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { DataService } from '../data.service';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 
 @Component({
@@ -15,14 +17,25 @@ export class TablicaComponent {
   displayedSalesHeader: any[];
   showAllRows: boolean = false;
   originalSalesHeader: any;
+  insertForm!: FormGroup;
+  showInsertForm = false;
 
-constructor(private dataService: DataService) {
+constructor(private dataService: DataService, private fb: FormBuilder, private http: HttpClient) {
   this.filteredSalesLines = [];
   this.selectedNo = '';
   this.displayedSalesHeader = [];
 }
 
 ngOnInit() {
+  this.insertForm = this.fb.group({
+    No: ['', Validators.required],
+    BillToName: ['', Validators.required],
+    BillToAddress: ['', Validators.required],
+    ShipToName: ['', Validators.required],
+    ShipToAddress: ['', Validators.required],
+    DocumentType: ['', Validators.required]
+  });
+
   this.dataService.getSalesHeader().subscribe({
     next: data => {
       this.salesHeader = data.map((item: any) => ({ ...item, editMode: false }));
@@ -32,16 +45,9 @@ ngOnInit() {
       console.error('Error occurred:', error);
     }
   });
+};
 
-  this.dataService.getSalesLine().subscribe({
-    next: data => {
-      this.salesLines = data;
-    },
-    error: error => {
-      console.error('Error occurred:', error);
-    }
-  }); 
-}
+
 
 
 updateDisplayedSalesHeader() {
@@ -93,6 +99,44 @@ deleteRow(no: string, DocumentType: string) {
       console.error('Error occurred:', error);
     }
   });
+}
+
+
+onSubmit() {
+
+  const formValues = this.insertForm.value;
+  let xmlDataStream = '';
+  xmlDataStream += '<SalesHeader>';
+  xmlDataStream += `<No>${formValues.No}</No>`;
+  xmlDataStream += `<BillToName>${formValues.BillToName}</BillToName>`;
+  xmlDataStream += `<BillToAddress>${formValues.BillToAddress}</BillToAddress>`;
+  xmlDataStream += `<ShipToName>${formValues.ShipToName}</ShipToName>`;
+  xmlDataStream += `<ShipToAddress>${formValues.ShipToAddress}</ShipToAddress>`;
+  xmlDataStream += `<DocumentType>${formValues.DocumentType}</DocumentType>`;
+  xmlDataStream += '</SalesHeader>';
+  console.log(xmlDataStream);
+
+  this.http.post('http://localhost:5161/api/BCCommunication/api/dodajNoviSH', xmlDataStream, {
+    responseType: 'text',
+    headers: new HttpHeaders().set('Content-Type', 'application/xml')
+}).subscribe({
+    next: (response) => {
+        console.log('Poslano!:', response);
+    },
+    error: (error) => {
+        console.error('Nije poslano jer =>:', error);
+        console.log(xmlDataStream);
+    }
+});
+
+
+  if (this.insertForm.valid) {
+    this.salesHeader.push(this.insertForm.value);
+    this.insertForm.reset();
+    this.showInsertForm = false;
+  } else {
+    alert('All fields are mandatory');
+  }
 }
 
 }

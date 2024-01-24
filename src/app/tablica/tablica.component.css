@@ -19,3 +19,34 @@ a {
     display: flex;
     align-items: center;
 }
+
+.table-container {
+  position: relative;
+}
+
+.desnoGore {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.form-row {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.form-row form {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.form-row form input {
+  flex: 1;
+  margin-right: 10px;
+}
+
+.form-row form button {
+  margin-left: 10px;
+}
