@@ -35,5 +35,7 @@ export class DataService {
   deleteSalesHeader(No: number, DocumentType: string): Observable<any> {
     return this.http.delete(`${this.salesHeaderUrlDELETE}/${No}/${DocumentType}`);
   }
+
+  
   
   }

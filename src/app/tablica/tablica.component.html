@@ -10,26 +10,40 @@
         <th pSortableColumn="ShipToAddress">ShipToAddress <p-sortIcon field="ShipToAddress"></p-sortIcon></th>
         <th pSortableColumn="DocumentType">DocumentType <p-sortIcon field="DocumentType"></p-sortIcon></th>
       </tr>
+    
+
       <td>
     <button (click)="showInsertForm = !showInsertForm">Insert</button>
       </td>
-  
-
       <div *ngIf="showInsertForm">
         <form [formGroup]="insertForm" (ngSubmit)="onSubmit()">
           <input formControlName="No" placeholder="No">
+          <div *ngIf="insertForm.controls['No'].errors && (insertForm.controls['No'].dirty || insertForm.controls['No'].touched)">
+            <div *ngIf="insertForm.controls['No'].errors['required']">
+              No is required.
+            </div>
+            <div *ngIf="insertForm.controls['No'].errors['maxLength']">
+              No cannot be more than 5 digits.
+            </div>
+            <div *ngIf="insertForm.controls['No'].errors['pattern']">
+              No can only contain numbers.
+            </div>
+          </div>
           <input formControlName="BillToName" placeholder="BillToName">
           <input formControlName="BillToAddress" placeholder="BillToAddress">
           <input formControlName="ShipToName" placeholder="ShipToName">
           <input formControlName="ShipToAddress" placeholder="ShipToAddress">
-          <input formControlName="DocumentType" placeholder="DocumentType">
+          <select formControlName="DocumentType">
+            <option value="Order">Order</option>
+            <option value="Invoice">Invoice</option>
+          </select>
           <button type="submit">Submit</button>
         </form>
       </div>
+
     </ng-template>
     <ng-template pTemplate="body" let-salesHeader>
       <tr>
-        
         <td *ngIf="!salesHeader.editMode; else editNo"><a (click)="selectNo(salesHeader.No)">{{salesHeader.No}}</a></td>
         <ng-template #editNo><input [(ngModel)]="salesHeader.No"></ng-template>
         <td *ngIf="!salesHeader.editMode; else editBillToName">{{salesHeader.BillToName}}</td>
